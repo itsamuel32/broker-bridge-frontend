@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  gap: 20px;
+}
+
+.table-container {
+  flex: 1;
+  max-width: 65%;
+}
+
+.text-container {
+  flex: 1;
+  max-width: 35%;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .table-container,
+  .text-container {
+    max-width: 100%;
+  }
+}

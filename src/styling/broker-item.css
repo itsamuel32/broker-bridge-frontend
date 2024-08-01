@@ -1,0 +1,40 @@
+.broker-item {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  width: 220px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.broker-item h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.broker-details {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 15px;
+  text-align: left;
+  color: #555;
+}
+
+.broker-details li {
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.visit-broker-btn {
+  text-decoration: none;
+  background-color: #0088cc;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  display: inline-block;
+  transition: background-color 0.3s;
+}
+
+.visit-broker-btn:hover {
+  background-color: #005577;
+}

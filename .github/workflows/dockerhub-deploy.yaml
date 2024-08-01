@@ -1,0 +1,84 @@
+name: Push to Docker Hub
+
+on:
+  push:
+    branches:
+      - development
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  BUILD_VERSION: v1.0.0
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+# ---------------- PUSH CALCULATIONS SERVICE----------------------#
+
+      - name: Build and push Docker image for Calculations Service
+        id: push_calculations
+        uses: docker/build-push-action@v4
+        with:
+          context: ./calculations-service
+          file: ./calculations-service/Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_USERNAME }}/calculations-service:${{ env.BUILD_VERSION }}
+
+      # ----------------BUILD AND PUSH API GATEWAY SERVICE----------------------#
+
+      - name: Build and push Docker image for API Gateway Service
+        id: push_api_gateway
+        uses: docker/build-push-action@v4
+        with:
+          context: ./api-gateway
+          file: ./api-gateway/Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_USERNAME }}/api-gateway:${{ env.BUILD_VERSION }}
+
+      
+
+      # ----------------BUILD AND PUSH BROKER SERVICE----------------------#
+
+      - name: Build and push Docker image for Broker Service
+        id: push_brokers
+        uses: docker/build-push-action@v4
+        with:
+          context: ./broker-service
+          file: ./broker-service/Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_USERNAME }}/broker-service:${{ env.BUILD_VERSION }}
+
+      # ----------------BUILD AND PUSH STOCK MARKET SERVICE----------------------#
+
+      - name: Build and push Docker image for Stock Market Service
+        id: push_stock_market
+        uses: docker/build-push-action@v4
+        with:
+          context: ./stock-market-service
+          file: ./stock-market-service/Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_USERNAME }}/stock-market-service:${{ env.BUILD_VERSION }}
+
+      # ----------------BUILD AND PUSH FRONTEND----------------------#
+
+      - name: Build and push Docker image for Frontend
+        id: push_frontend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./broker-bridge-frontend
+          file: ./broker-bridge-frontend/Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_USERNAME }}/broker-bridge-frontend:${{ env.BUILD_VERSION }}

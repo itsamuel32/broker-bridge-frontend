@@ -1,0 +1,77 @@
+.triangleContainer {
+  width: 60%;
+  height: 350px;
+  background-color: #d2d1cc91;
+  clip-path: polygon(0 0, 50% 0, 100% 100%, 0 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.innerPicko {
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  margin-left: 20px;
+}
+
+.iconContainer {
+  width: 100px;
+  height: 100px;
+}
+
+.iconContainer img {
+  width: 100%;
+  height: auto;
+}
+
+.heroTitle {
+  font-size: 24px;
+  color: rgb(0, 0, 0);
+  text-align: left;
+  margin-left: 20px;
+}
+
+.additionalText {
+  font-size: 16px;
+  color: rgb(0, 0, 0);
+  text-align: left;
+  margin-left: 20px;
+  width: 80%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .triangleContainer {
+    width: 100%; /* Full width on smaller screens */
+    padding: 10px;
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%
+    ); /* Simplified shape for smaller screens */
+  }
+
+  .iconContainer {
+    width: 80px; /* Smaller icon on smaller screens */
+    height: 80px;
+  }
+
+  .heroTitle {
+    font-size: 18px; /* Smaller font size on smaller devices */
+  }
+
+  .additionalText {
+    font-size: 14px; /* Smaller text size on smaller devices */
+    margin-right: 5px; /* Smaller margin on the right on smaller devices */
+    width: 100%;
+  }
+  .textContainer {
+    width: 100%;
+  }
+}

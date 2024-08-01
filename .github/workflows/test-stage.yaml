@@ -1,0 +1,56 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r calculations-service/requirements.txt
+          pip install pytest pytest-cov coverage
+
+      - name: Run Unit Tests
+        run: |
+          cd calculations-service  
+          pytest
+
+      - name: Measure Code Coverage
+        run: |
+          cd calculations-service
+          coverage run -m pytest
+          coverage report
+          coverage html -d ../coverage-reports
+
+      - name: Run Integration Tests
+        run: |
+          cd stock-market-service  
+          pytest
+
+      - name: Measure Code Coverage
+        run: |
+          cd stock-market-service
+          coverage run -m pytest
+          coverage report
+          coverage html -d ../coverage-reports
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: ./coverage-reports

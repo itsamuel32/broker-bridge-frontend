@@ -1,0 +1,61 @@
+name: Sonarqube Scanning
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build:
+    name: Scan with SonarQube
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        folder:
+          - calculations-service
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+        working-directory: ${{ matrix.folder }}
+
+      - name: Debug Environment Variables
+        run: |
+          echo "SONARQUBE_URL=${{ secrets.SONAR_HOST_URL }}"
+          echo "SONARQUBE_TOKEN=${{ secrets.SONAR_TOKEN }}"
+
+      - name: Start SonarQube and PostgreSQL
+        run: |
+          docker-compose -f docker-compose.dev.yaml up -d
+          # Wait for SonarQube to be fully up and running
+          until curl -s ${SONARQUBE_URL}/api/system/status | grep -q '"status":"UP"'; do
+            echo "Waiting for SonarQube to be up and running..."
+            sleep 10
+          done
+        env:
+          SONARQUBE_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONARQUBE_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Run SonarQube Scanner in Docker
+        run: |
+          docker run --rm \
+           -v "${{ github.workspace }}/${{ matrix.folder }}:/usr/src" \
+           -v "${{ github.workspace }}/sonar-project.properties:/usr/src/sonar-project.properties" \
+           -e SONAR_HOST_URL=${{ secrets.SONAR_HOST_URL }} \
+           -e SONAR_LOGIN=${{ secrets.SONAR_TOKEN }} \
+           sonarsource/sonar-scanner-cli:latest  # Consider specifying a version instead of 'latest'
+        working-directory: ${{ matrix.folder }}
+
+      - name: Stop SonarQube and PostgreSQL
+        run: |
+          docker-compose -f docker-compose.qcheck.yaml down

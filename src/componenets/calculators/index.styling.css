@@ -1,0 +1,70 @@
+.inv-calculator-container {
+  text-align: center;
+  background-color: #f7f5f5;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: auto;
+}
+
+.investment-calculator {
+  text-align: start;
+}
+
+.calc-title {
+  text-align: center;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-group select,
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.calculate-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.calculate-button:hover {
+  background-color: #0056b3;
+}
+
+.investment-calculator {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.input-section,
+.date-section {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%; /* Take full width on small screens */
+}
+
+@media (min-width: 600px) {
+  /* Adjust based on your breakpoint */
+  .input-section,
+  .date-section {
+    flex-basis: 49%; /* Each section takes about half the width on larger screens */
+  }
+}

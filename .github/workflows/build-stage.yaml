@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build:
+    name: Run Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build Frontend
+        run: |
+          docker build -t frontend .
+
+      # Start services
+      - name: Start Frontend
+        run: |
+          docker run -d --network app-net -p 3000:80 --name frontend frontend
+
+      # Run Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          start: echo "End-To-End Testing Started"
+          working-directory: /
+          wait-on: "http://localhost:3000"
+          wait-on-timeout: 60
+        env:
+          CYPRESS_BASE_URL: http://localhost:3000
+
+      # Cleanup
+      - name: Cleanup
+        if: always()
+        run: docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker network rm app-net
